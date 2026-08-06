@@ -1,0 +1,6 @@
+# allow crawling everything by default
+User-agent: *
+Disallow:
+
+# Replace once the domain is attached (see src/lib/content/site.ts and README).
+Sitemap: https://YOUR-DOMAIN-HERE/sitemap.xml

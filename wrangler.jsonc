@@ -1,0 +1,15 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	// Rename to your Cloudflare project name before deploying.
+	"name": "masalaweb",
+	"compatibility_date": "2026-08-05",
+	// Assets-only Worker: no `main` script, nothing runs at request time.
+	// Cloudflare just serves the prerendered static files from `build/`.
+	// not_found_handling is left at its default ("none" — a plain 404 for
+	// unmatched paths); adapter-static's strict mode doesn't emit a 404.html,
+	// and setting fallback to generate one would disable the "every route
+	// must be prerenderable" build guardrail this project relies on.
+	"assets": {
+		"directory": "build"
+	}
+}
