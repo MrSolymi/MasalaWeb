@@ -38,12 +38,10 @@ pnpm cf:preview      # closer to production: runs `wrangler dev` against build/
    _Workers Builds_, not the older Pages product). Build command: `pnpm build`. Assets directory:
    `build`.
 3. Every push to `main` auto-deploys; other branches get preview deployments.
-4. Once deployed, attach your domain under the Worker's **Settings → Domains & Routes → Custom
-   Domains**.
-5. After the domain is live, replace the `YOUR-DOMAIN-HERE` placeholder in
-   [`src/lib/content/site.ts`](src/lib/content/site.ts) and
-   [`static/robots.txt`](static/robots.txt) with the real domain (used for canonical URLs,
-   hreflang tags, and the sitemap).
+4. Once deployed, attach `masalagarden.hu` under the Worker's **Settings → Domains & Routes →
+   Custom Domains**. The domain is already set in [`src/lib/content/site.ts`](src/lib/content/site.ts)
+   and [`static/robots.txt`](static/robots.txt) (used for canonical URLs, hreflang tags, and the
+   sitemap).
 
 Manual deploy without the Git integration: `pnpm deploy` (runs `pnpm build && wrangler deploy`).
 

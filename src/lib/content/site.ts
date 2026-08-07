@@ -1,5 +1,4 @@
-// Fill in once the domain is attached to the Cloudflare Worker (see README).
-export const siteOrigin = 'https://YOUR-DOMAIN-HERE';
+export const siteOrigin = 'https://masalagarden.hu';
 
 // Placeholder contact details — replace once real content is provided.
 export const restaurant = {
