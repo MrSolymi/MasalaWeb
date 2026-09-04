@@ -26,3 +26,8 @@ src/lib/paraglide
 project.inlang/cache/
 
 docs
+
+# Raw source material for content/design (logo comp, menu scans, photos) -
+# not needed to build or run the site; the processed assets it fed live
+# under src/lib/assets/res.
+/res_for_plan
