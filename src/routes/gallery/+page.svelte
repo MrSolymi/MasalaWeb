@@ -48,7 +48,7 @@
 				type="button"
 				onclick={() => open(i)}
 				aria-label={t(photo.alt)}
-				class="group aspect-[4/3] overflow-hidden rounded-xl bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+				class="group aspect-4/3 overflow-hidden rounded-xl bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 			>
 				<enhanced:img
 					src={photo.src}

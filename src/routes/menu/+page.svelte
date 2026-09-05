@@ -1,16 +1,60 @@
 <script lang="ts">
+	import { tick } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import { page } from '$app/state';
 	import * as m from '$lib/paraglide/messages.js';
 	import Seo from '$lib/components/seo/Seo.svelte';
 	import SectionHeading from '$lib/components/SectionHeading.svelte';
 	import Container from '$lib/components/layout/Container.svelte';
 	import MenuItemCard from '$lib/components/menu/MenuItemCard.svelte';
 	import AllergenIcons from '$lib/components/menu/AllergenIcons.svelte';
-	import { menuCategories, lunchMenu, drinksMenu, allergenLabels, formatPrice } from '$lib/content/menu';
+	import * as Select from '$lib/components/ui/select/index.js';
+	import {
+		menuCategories,
+		lunchMenu,
+		drinksMenu,
+		allergenLabels,
+		formatPrice,
+		findMenuItemCategoryId
+	} from '$lib/content/menu';
 	import { t } from '$lib/i18n';
+
+	import ChefHatIcon from '@lucide/svelte/icons/chef-hat';
 
 	let { data } = $props();
 
 	const allergenList = Object.keys(allergenLabels) as (keyof typeof allergenLabels)[];
+
+	let activeCategoryId = $state(menuCategories[0].id);
+	const activeCategory = $derived(
+		menuCategories.find((category) => category.id === activeCategoryId) ?? menuCategories[0]
+	);
+
+	let highlightedItemId = $state<string | null>(null);
+	let highlightTimeout: ReturnType<typeof setTimeout> | undefined;
+	let lastHandledHash = '';
+
+	$effect(() => {
+		const hash = page.url.hash.replace(/^#/, '');
+		if (!hash || hash === lastHandledHash) return;
+		lastHandledHash = hash;
+
+		if (menuCategories.some((category) => category.id === hash)) {
+			activeCategoryId = hash;
+			return;
+		}
+
+		const categoryId = findMenuItemCategoryId(hash);
+		if (!categoryId) return;
+
+		activeCategoryId = categoryId;
+		tick().then(() => {
+			document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			clearTimeout(highlightTimeout);
+			highlightedItemId = hash;
+			highlightTimeout = setTimeout(() => (highlightedItemId = null), 2200);
+		});
+	});
 </script>
 
 <Seo title={data.title} description={data.description} />
@@ -27,21 +71,34 @@
 	class="border-border/70 bg-background/95 sticky top-16 z-30 border-b backdrop-blur"
 >
 	<Container>
-		<div class="scrollbar-none flex gap-2 overflow-x-auto py-3">
+		<div class="flex flex-wrap items-center gap-3 py-3">
 			<a
 				href="#lunch"
 				class="shrink-0 rounded-full border border-border px-3.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors hover:border-primary hover:text-primary"
 			>
 				{m.menu_lunch_title()}
 			</a>
-			{#each menuCategories as category (category.id)}
-				<a
-					href="#{category.id}"
-					class="shrink-0 rounded-full border border-border px-3.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors hover:border-primary hover:text-primary"
-				>
-					{t(category.name)}
-				</a>
-			{/each}
+
+			<Select.Root
+				type="single"
+				value={activeCategoryId}
+				onValueChange={(value) => {
+					if (value) activeCategoryId = value;
+				}}
+			>
+				<Select.Trigger class="w-full sm:w-64" aria-label={m.menu_category_select_label()}>
+					<span class="flex items-center gap-2">
+						<ChefHatIcon class="size-4 text-primary" />
+						{t(activeCategory.name)}
+					</span>
+				</Select.Trigger>
+				<Select.Content>
+					{#each menuCategories as category (category.id)}
+						<Select.Item value={category.id} label={t(category.name)} />
+					{/each}
+				</Select.Content>
+			</Select.Root>
+
 			<a
 				href="#drinks"
 				class="shrink-0 rounded-full border border-border px-3.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors hover:border-primary hover:text-primary"
@@ -88,13 +145,13 @@
 		<p class="mt-4 text-xs text-muted-foreground">{t(lunchMenu.note)}</p>
 	</section>
 
-	{#each menuCategories as category (category.id)}
-		<section id={category.id} class="scroll-mt-32">
-			<SectionHeading title={t(category.name)} />
-			{#if category.image}
+	{#key activeCategoryId}
+		<section id={activeCategoryId} class="scroll-mt-32" transition:fade={{ duration: 150 }}>
+			<SectionHeading title={t(activeCategory.name)} />
+			{#if activeCategory.image}
 				<div class="mt-6 w-full max-w-md rounded-xl bg-muted p-4">
 					<img
-						src={category.image}
+						src={activeCategory.image}
 						alt=""
 						loading="lazy"
 						decoding="async"
@@ -103,12 +160,12 @@
 				</div>
 			{/if}
 			<div class="mt-4">
-				{#each category.items as item (item.id)}
-					<MenuItemCard {item} />
+				{#each activeCategory.items as item (item.id)}
+					<MenuItemCard {item} highlighted={item.id === highlightedItemId} />
 				{/each}
 			</div>
 		</section>
-	{/each}
+	{/key}
 
 	<section id="drinks" class="scroll-mt-32">
 		<SectionHeading title={m.menu_drinks_title()} />

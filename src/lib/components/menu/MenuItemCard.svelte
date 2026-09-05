@@ -2,12 +2,19 @@
 	import type { MenuItem } from '$lib/content/menu';
 	import { formatPrice } from '$lib/content/menu';
 	import { t } from '$lib/i18n';
+	import { cn } from '$lib/utils.js';
 	import AllergenIcons from './AllergenIcons.svelte';
 
-	let { item }: { item: MenuItem } = $props();
+	let { item, highlighted = false }: { item: MenuItem; highlighted?: boolean } = $props();
 </script>
 
-<article class="border-border/60 flex gap-4 border-b py-5 last:border-0">
+<article
+	id={item.id}
+	class={cn(
+		'border-border/60 scroll-mt-40 flex gap-4 rounded-xl border-b py-5 outline-2 outline-offset-4 transition-[outline-color] duration-500 last:border-0',
+		highlighted ? 'outline-primary' : 'outline-transparent'
+	)}
+>
 	{#if item.image}
 		<div class="size-20 shrink-0 rounded-xl bg-muted p-1.5 sm:size-24">
 			<img

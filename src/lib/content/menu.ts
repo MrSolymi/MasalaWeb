@@ -431,7 +431,7 @@ export const menuCategories: MenuCategory[] = [
 	},
 	{
 		id: 'tandoor-grill-fish',
-		name: { en: 'Tandoor, Grill & Fish', hu: 'Tandoor, Grill, Tenger Gyümölcsei' },
+		name: { en: 'Tandoor, Grill & Fish', hu: 'Tandoor, Grill, Hal' },
 		items: [
 			item('tandoor-paneer-tikka', { en: 'Paneer Tikka', hu: 'Sajtos Tikka' }, 4200, {
 				description: {
@@ -835,6 +835,11 @@ export function findMenuItem(id: string): MenuItem | undefined {
 		if (found) return found;
 	}
 	return undefined;
+}
+
+export function findMenuItemCategoryId(itemId: string): string | undefined {
+	return menuCategories.find((category) => category.items.some((menuItem) => menuItem.id === itemId))
+		?.id;
 }
 
 export const allergenLabels: Record<Allergen, LocalizedText> = {
