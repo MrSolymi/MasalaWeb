@@ -1,0 +1,16 @@
+# Unprefixed URLs (/, /menu, /about, /gallery, /contact) only exist as thin
+# client-side redirect stubs (see src/routes/+layout.ts) — the prerendered
+# HTML for them is a bare `<script>`+meta-refresh fragment with a 200 status
+# and no real <html>/<head>, which Google's crawler reports as a redirect
+# error instead of following. Cloudflare applies these at the edge as real
+# 301s before falling back to the static files, so crawlers and direct
+# visitors land on the canonical default-locale page immediately.
+/            /en/           301
+/menu        /en/menu/      301
+/menu/       /en/menu/      301
+/about       /en/about/     301
+/about/      /en/about/     301
+/gallery     /en/gallery/   301
+/gallery/    /en/gallery/   301
+/contact     /en/contact/   301
+/contact/    /en/contact/   301

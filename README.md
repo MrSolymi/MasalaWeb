@@ -1,8 +1,8 @@
 # MasalaWeb
 
-Restaurant website skeleton. SvelteKit (static-prerendered) + Tailwind + shadcn-svelte, with
-English/Hungarian at separate URLs (`/en/...`, `/hu/...`), deployed to Cloudflare Workers as
-static assets.
+Website for [Masala Garden](https://masalagarden.hu), a Pakistani/Indian restaurant in Debrecen.
+SvelteKit (static-prerendered) + Tailwind + shadcn-svelte, with English/Hungarian at separate
+URLs (`/en/...`, `/hu/...`), deployed to Cloudflare Workers as static assets.
 
 ## Stack
 
@@ -15,6 +15,21 @@ static assets.
   (`/en/...`, `/hu/...`); see `vite.config.ts` for the `strategy`/`urlPatterns` config that makes
   this work
 - **Cloudflare Workers** (assets-only Worker, deployed via `wrangler`)
+
+## SEO
+
+- Each route's `+page.ts` sets a localized `title`/`description`, rendered by
+  [`src/lib/components/seo/Seo.svelte`](src/lib/components/seo/Seo.svelte) along with a
+  `rel="canonical"` link and `hreflang` alternates (including `x-default`) for every locale.
+- [`src/routes/sitemap.xml/+server.ts`](src/routes/sitemap.xml/+server.ts) generates
+  `sitemap.xml` from `routePaths` × `locales`; [`static/robots.txt`](static/robots.txt) points to
+  it.
+- Bare, unprefixed URLs (`/`, `/menu`, `/about`, `/gallery`, `/contact`) only exist as thin
+  client-side redirect stubs (see `+layout.ts`) — prerendering them produces a bare
+  `<script>`+meta-refresh fragment with a `200` status and no real `<html>`/`<head>`, which
+  Google reports as a redirect error instead of following. [`static/_redirects`](static/_redirects)
+  fixes this with real edge-level `301`s to the default-locale (`/en/...`) pages — Cloudflare
+  applies it to static assets with no server code needed, so it fits the assets-only Worker setup.
 
 ## Developing
 
@@ -45,9 +60,10 @@ pnpm cf:preview      # closer to production: runs `wrangler dev` against build/
 
 Manual deploy without the Git integration: `pnpm deploy` (runs `pnpm build && wrangler deploy`).
 
-## Content still to fill in
+## Content
 
-Everything under [`src/lib/content/`](src/lib/content) and the `messages/en.json` /
-`messages/hu.json` translation files is placeholder — restaurant name, phone number, address,
-menu, photos, and real copy all need to be dropped in once available. Page routes already exist
-for Home, Menu, About, Gallery, and Contact under [`src/routes/`](src/routes).
+Restaurant info (contact details, hours, highlights, social/delivery links), the menu, and
+gallery photos live under [`src/lib/content/`](src/lib/content) (`site.ts`, `menu.ts`,
+`gallery.ts`). All UI copy is translated in `messages/en.json` / `messages/hu.json` (Paraglide
+message files — add a key to both when adding new copy). Page routes exist for Home, Menu,
+About, Gallery, and Contact under [`src/routes/`](src/routes).

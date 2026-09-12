@@ -23,6 +23,9 @@ export const restaurant = {
 		return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`;
 	},
 	mapLinkHref: 'https://www.google.com/maps/search/?api=1&query=Darabos+utca+50,+4026+Debrecen,+Hungary',
+	woltUrl: 'https://wolt.com/hu/hun/debrecen/restaurant/masala-garden-1',
+	facebookUrl: 'https://www.facebook.com/p/Masala-Garden-61589839560438/',
+	instagramUrl: 'https://www.instagram.com/masalagarden_restaurant/',
 	popularDishIds: [
 		'biryani-chicken',
 		'main-butter-chicken',
@@ -32,7 +35,7 @@ export const restaurant = {
 	] as const,
 	highlights: [
 		{ icon: 'users', label: { en: '40 seats', hu: '40 fő befogadóképesség' } },
-		{ icon: 'trees', label: { en: 'Outdoor terrace', hu: 'Kinti terasz' } },
+		{ icon: 'trees', label: { en: 'Outdoor terrace (36 seats)', hu: 'Terasz (36 fő)' } },
 		{ icon: 'car', label: { en: 'Parking available', hu: 'Parkolási lehetőség' } }
 	]
 };

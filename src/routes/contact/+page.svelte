@@ -10,6 +10,10 @@
 	import MailIcon from '@lucide/svelte/icons/mail';
 	import MapPinIcon from '@lucide/svelte/icons/map-pin';
 	import ClockIcon from '@lucide/svelte/icons/clock';
+	import CreditCardIcon from '@lucide/svelte/icons/credit-card';
+	import woltIcon from '$lib/assets/res/brand/wolt-icon.png';
+	import facebookIcon from '$lib/assets/res/brand/facebook-icon.svg';
+	import instagramIcon from '$lib/assets/res/brand/instagram-icon.svg';
 
 	let { data } = $props();
 </script>
@@ -64,11 +68,73 @@
 					<dd class="text-lg font-semibold">{m.footer_hours_value()}</dd>
 				</div>
 			</div>
+			<div class="flex items-start gap-3">
+				<span class="mt-0.5 flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full">
+					<img src={woltIcon} alt="" width="36" height="36" class="size-full object-cover" />
+				</span>
+				<div>
+					<dt class="text-sm text-muted-foreground">{m.contact_wolt_label()}</dt>
+					<dd>
+						<a
+							href={restaurant.woltUrl}
+							target="_blank"
+							rel="noreferrer"
+							class="text-lg font-semibold hover:text-primary"
+						>
+							{m.contact_wolt_cta()}
+						</a>
+					</dd>
+				</div>
+			</div>
+			<div class="flex items-start gap-3">
+				<span class="mt-0.5 flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full">
+					<img src={facebookIcon} alt="" width="36" height="36" class="size-full object-cover" />
+				</span>
+				<div>
+					<dt class="text-sm text-muted-foreground">{m.contact_facebook_label()}</dt>
+					<dd>
+						<a
+							href={restaurant.facebookUrl}
+							target="_blank"
+							rel="noreferrer"
+							class="text-lg font-semibold hover:text-primary"
+						>
+							{m.contact_facebook_cta()}
+						</a>
+					</dd>
+				</div>
+			</div>
+			<div class="flex items-start gap-3">
+				<span class="mt-0.5 flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full">
+					<img src={instagramIcon} alt="" width="36" height="36" class="size-full object-cover" />
+				</span>
+				<div>
+					<dt class="text-sm text-muted-foreground">{m.contact_instagram_label()}</dt>
+					<dd>
+						<a
+							href={restaurant.instagramUrl}
+							target="_blank"
+							rel="noreferrer"
+							class="text-lg font-semibold hover:text-primary"
+						>
+							{m.contact_instagram_cta()}
+						</a>
+					</dd>
+				</div>
+			</div>
 		</dl>
 
 		<div class="rounded-2xl bg-primary p-6 text-primary-foreground">
 			<h2 class="font-display text-xl font-bold">{m.contact_reservation_title()}</h2>
 			<p class="mt-2 text-primary-foreground/85">{m.contact_reservation_body()}</p>
+		</div>
+
+		<div class="rounded-2xl border border-border bg-muted/40 p-6">
+			<h2 class="flex items-center gap-2 font-display text-xl font-bold">
+				<CreditCardIcon class="size-5 text-primary" />
+				{m.payment_methods_title()}
+			</h2>
+			<p class="mt-2 text-muted-foreground">{m.payment_methods_body()}</p>
 		</div>
 	</div>
 
@@ -78,7 +144,7 @@
 			<iframe
 				title={m.contact_map_title()}
 				src={restaurant.mapEmbedSrc}
-				class="h-80 w-full sm:h-full"
+				class="h-80 w-full sm:h-full lg:h-136"
 				loading="lazy"
 			></iframe>
 		</div>
